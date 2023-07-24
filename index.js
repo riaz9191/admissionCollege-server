@@ -66,7 +66,26 @@ async function run() {
       const result = await usersCollection.findOne(filter);
       res.send(result);
     });
+// update user data
+app.put('/users/id/:id', async (req, res) => {
+  const id = req.params.id;
+  const filter = { _id: new ObjectId(id) };
+  const updatedData = req.body;
+  const result = await usersCollection.updateOne(filter, { $set: updatedData });
+  res.send(result);
+});
 
+// get gallery data
+app.get('/gallery', async (req, res) => {
+  const result = await galleryCollection.find().toArray();
+  res.send(result);
+});
+
+// get colleges data
+app.get('/colleges', async (req, res) => {
+  const result = await collegesCollection.find().toArray();
+  res.send(result);
+});
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
