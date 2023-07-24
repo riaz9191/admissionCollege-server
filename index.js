@@ -31,7 +31,26 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
-    const usersCollection = client.db("collegia").collection("users");
+    
+    const usersCollection = client.db("collageGate").collection("users");
+    const galleryCollection = client.db("collageGate").collection("gallery");
+    const collegesCollection = client.db("collageGate").collection("colleges");
+    const applyCollection = client.db("collageGate").collection("apply");
+
+
+    // insert user
+    app.post('/users', async (req, res) => {
+      const user = req.body;
+      const query = { email: user.email };
+      const existingUser = await usersCollection.findOne(query);
+
+      if (existingUser) {
+        return res.send({ message: 'User already exists' });
+      } else {
+        const result = await usersCollection.insertOne(user);
+        res.send(result);
+      }
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
