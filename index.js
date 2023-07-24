@@ -59,6 +59,14 @@ async function run() {
       const result = await usersCollection.findOne(query);
       res.send(result);
     });
+     // get user by id
+     app.get('/edit/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await usersCollection.findOne(filter);
+      res.send(result);
+    });
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
