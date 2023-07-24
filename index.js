@@ -86,6 +86,19 @@ app.get('/colleges', async (req, res) => {
   const result = await collegesCollection.find().toArray();
   res.send(result);
 });
+// Search colleges based on college name
+app.get('/colleges/search', async (req, res) => {
+  const searchQuery = req.query.query;
+  if (!searchQuery) {
+    return res.status(400).json({ message: 'Search query is required.' });
+  }
+
+    const regex = new RegExp(searchQuery, 'i');
+    const filter = { $or: [{ name: regex }, { admission: regex }, { research: { ongoingProjects: regex } }] };
+    const result = await collegesCollection.find(filter).toArray();
+    res.json(result);
+  
+});
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
